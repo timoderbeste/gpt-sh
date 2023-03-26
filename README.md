@@ -151,10 +151,25 @@ int sumArray(int arr[], int len) {
 
 ## Limitations
 
-Currently Shell GPT 2 is still under heavy development.
+Currently Shell GPT 2 is still under active development.
 Unlike Shell GPT, which focuses on serving as a command-line interface for accessing GPT functionalities, such as a chat,
 Shell GPT 2 focuses on helping you processing files on your own device.
 No matter the task is summarizing the content of a long report, or creating new content and then saving it on your device for you directly, Shell GPT 2 (at least the future version) will be your best helper!
+
+## Upcoming features
+
+These are the features being developed right now.
+
+### General Interactions
+
+- Support left and right arrows to change text content
+- Support a history of recent commands accessible through up and down arrows
+
+### DO Commands
+
+- Rename an existing variable
+- Cache the env variables so that created/saved variables are not lost every time the shell is restarted
+- Save the values of a variable to a file given a file path
 
 ## Acknowledgement
 
