@@ -16,34 +16,7 @@ OPENAI_API_KEY=[YourAPIKey]
 ## Usage
 
 Unlike the original Shell GPT, Shell GPT 2 functions like an actual shell, where you enter a command and then get a response.
-There are four types of commands: `SHELL`, `CODE`, `DO`, and `THINK`.
-
-### SHELL
-
-This is the same as the shell command supported by Shell GPT.
-You can describe some action you want to perform with the shell, Shell GPT 2 will translate your command into a shell script and then execute your command.
-
-```
->>> SHELL: Create five files with names from one to five and type of txt in /tmp
-COMMAND: touch /tmp/{1..5}.txt
-Run this command? [y/N]: y
-```
-
-### CODE
-
-This is the same as the code command supported by Shell GPT.
-You can describe the functionality of some code and have GPT write it for you.
-
-```
->>> CODE: Write a c function for summing up an array.
-int sumArray(int arr[], int len) {
-   int sum = 0;
-   for (int i = 0; i < len; i++) {
-      sum += arr[i];
-   }
-   return sum;
-}
-```
+There are four types of commands: `DO`, and `THINK`, `SHELL`, `CODE`.
 
 ### DO
 
@@ -139,6 +112,33 @@ KEYS: JavaScript
 
 SENT: Implemented the frontend routing using React Router and ensured unauthorized users are redirected to an error page.
 KEYS: ReactJS
+```
+
+### SHELL
+
+This is the same as the shell command supported by Shell GPT.
+You can describe some action you want to perform with the shell, Shell GPT 2 will translate your command into a shell script and then execute your command.
+
+```
+>>> SHELL: Create five files with names from one to five and type of txt in /tmp
+COMMAND: touch /tmp/{1..5}.txt
+Run this command? [y/N]: y
+```
+
+### CODE
+
+This is the same as the code command supported by Shell GPT.
+You can describe the functionality of some code and have GPT write it for you.
+
+```
+>>> CODE: Write a c function for summing up an array.
+int sumArray(int arr[], int len) {
+   int sum = 0;
+   for (int i = 0; i < len; i++) {
+      sum += arr[i];
+   }
+   return sum;
+}
 ```
 
 ## Limitations
