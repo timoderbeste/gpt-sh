@@ -1,4 +1,3 @@
 DO: Load the following files. "/Users/timowang/Documents/test-sgpt/desc.txt" and "/Users/timowang/Documents/test-sgpt/keys.txt"
-Running action LOAD_FILE
 DO: Show all env vars
 THINK: Given the following keywords: FILE_CONTENT_VAR_2.\n Given the following text: FILE_CONTENT_VAR_1. Identify all sentences that contain the keywords. Print with the following format: SENT: [A sentence with keywords]\nKEYS: [All keywords that occur in the sentence].
