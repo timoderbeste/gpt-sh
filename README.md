@@ -167,7 +167,6 @@ These are the features being developed right now.
 ### DO Commands
 
 - Rename an existing variable
-- Cache the env variables so that created/saved variables are not lost every time the shell is restarted
 - Save the values of a variable to a file given a file path
 
 ## Acknowledgement

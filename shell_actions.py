@@ -6,8 +6,11 @@ from prompt_builder import PromptBuilder
 from utils import get_tmp_env_var_name, typer_writer
 
 prompt_builder = PromptBuilder()
-ACTIONS = ["LOAD_ENV_VAR", "SAVE_ENV_VAR",
-           "BUILD_PROMPT", "LOAD_FILE", "SAVE_FILE", "SHOW_ENV_VARS"]
+ACTIONS = [
+    "LOAD_ENV_VAR", "SAVE_ENV_VAR", "SHOW_ENV_VARS",
+    "RENAME_ENV_VAR", "DELETE_ENV_VAR", "CLEAR_ENV_VARS",
+    "LOAD_FILE", "SAVE_FILE",
+]
 
 
 def handle_shell_action(inp, env_var2val, temperature) -> bool:
@@ -70,7 +73,8 @@ def handle_load_file(inp, env_var2val, temperature) -> bool:
 
     for file_path in file_paths:
         file_path = file_path.strip()
-        new_env_var_name = get_tmp_env_var_name(env_var2val, "FILE_CONTENT_VAR_")
+        new_env_var_name = get_tmp_env_var_name(
+            env_var2val, "FILE_CONTENT_VAR_")
         try:
             with open(file_path, "r") as fp:
                 env_var2val[new_env_var_name] = fp.read()

@@ -1,8 +1,8 @@
 import argparse
+import json
 import os
 import typer
 
-import test_env_var2val
 from openai_client import get_gpt_response
 from prompt_builder import PromptBuilder
 from shell_actions import handle_shell_action
@@ -27,8 +27,12 @@ def main():
     temperature = args.temperature
 
     prompt_builder = PromptBuilder()
-    # env_var2val = test_env_var2val.v1
-    env_var2val = dict()
+
+    try:
+        with open(os.path.join(os.getenv("HOME"), ".config", "shell_gpt", "env_var2val.json"), "r") as fp:
+            env_var2val = json.load(fp)
+    except FileNotFoundError:
+        env_var2val = dict()
 
     if script_path:
         raise NotImplementedError("Script path is not implemented yet")
@@ -36,6 +40,10 @@ def main():
         while True:
             inp = input(">>> ")
             if inp == "exit":
+                with open(os.path.join(os.getenv("HOME"),
+                                       ".config", "shell_gpt",
+                                       "env_var2val.json"), "w") as fp:
+                    json.dump(env_var2val, fp)
                 break
 
             if inp.startswith("SHELL: "):
