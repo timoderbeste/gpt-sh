@@ -7,9 +7,9 @@ from default_prompts import CODE_PROMPT, SHELL_PROMPT
 
 class PromptBuilder:
     def __init__(self) -> None:
-        shell = os.basename(os.environ.get("SHELL", "Unknown"))
+        shell = os.path.basename(os.environ.get("SHELL", "Unknown"))
         self.os = self.__os_name()
-        self.shell = os.basename(os.getenv("SHELL", "Unknown"))
+        self.shell = os.path.basename(os.getenv("SHELL", "Unknown"))
 
     def shell_prompt(self, inp: str) -> str:
         inp = inp.strip()
@@ -23,7 +23,7 @@ class PromptBuilder:
             inp += "?"
         return CODE_PROMPT.format(inp=inp)
 
-    def __os_name() -> str:
+    def __os_name(self) -> str:
         operation_system = {
             "Linux": "Linux/" + distro_name(pretty=True),
             "Windows": "Widnows " + platform.release(),
