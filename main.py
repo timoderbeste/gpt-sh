@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import readline
 import typer
 
 from openai_client import get_gpt_response
@@ -11,8 +12,36 @@ from utils import (
     typer_writer,
 )
 
+history_commands = []
+
+
+def key_handler(event):
+    global history_commands
+    if event == readline.KEY_UP:
+        # User pressed Up arrow, so get previous command from history
+        if history_commands:
+            readline.set_history_item(
+                readline.get_current_history_length() - 1, history_commands.pop())
+    elif event == readline.KEY_DOWN:
+        # User pressed Down arrow, so get next command from history
+        if readline.get_current_history_length() > len(history_commands):
+            history_commands.append(readline.get_history_item(
+                readline.get_current_history_length() - 1))
+    elif event == readline.KEY_LEFT:
+        # User pressed Left arrow, so move cursor left
+        current_pos = readline.get_begidx()
+        if current_pos > 0:
+            readline.set_cursor_position(current_pos - 1)
+    elif event == readline.KEY_RIGHT:
+        # User pressed Right arrow, so move cursor right
+        current_pos = readline.get_begidx()
+        end_pos = readline.get_endidx()
+        if current_pos < end_pos:
+            readline.set_cursor_position(current_pos + 1)
+
 
 def main():
+    global history_commands
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--script_path", help="Path to the script to run", required=False)
@@ -34,9 +63,17 @@ def main():
     except FileNotFoundError:
         env_var2val = dict()
 
+    try:
+        with open(os.path.join(os.getenv("HOME"), ".config", "shell_gpt", "history_commands.json"), "r") as fp:
+            history_commands = json.load(fp)
+    except FileNotFoundError:
+        history_commands = list()
+
     if script_path:
         raise NotImplementedError("Script path is not implemented yet")
     else:
+        readline.parse_and_bind('')
+        readline.set_pre_input_hook(key_handler)
         while True:
             inp = input(">>> ")
             if inp == "exit":
