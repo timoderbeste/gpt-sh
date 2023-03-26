@@ -1,0 +1,7 @@
+OPENAI_API_KEY=[Your API Key Here]
+OPENAI_API_HOST=https://api.openai.com
+CHAT_CACHE_LENGTH=100
+CHAT_CACHE_PATH=/var/folders/s7/hdb_7g49337dx8y_36_j1w7m0000gn/T/shell_gpt/chat_cache
+CACHE_LENGTH=100
+CACHE_PATH=/var/folders/s7/hdb_7g49337dx8y_36_j1w7m0000gn/T/shell_gpt/cache
+REQUEST_TIMEOUT=60
