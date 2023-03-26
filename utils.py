@@ -1,4 +1,5 @@
 import os
+import readline
 import typer
 from click import BadParameter
 from rich.progress import Progress, SpinnerColumn, TextColumn

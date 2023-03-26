@@ -8,16 +8,26 @@ from openai_client import get_gpt_response
 from prompt_builder import PromptBuilder
 from shell_actions import handle_shell_action
 from think_actions import handle_think_action
-from utils import (
-    typer_writer,
-)
+from utils import typer_writer
 
 history_commands = []
+
+history_file = os.path.join(os.getenv("HOME"),
+                            ".config", "shell_gpt",
+                            "history_commands.json")
+try:
+    readline.read_history_file(history_file)
+except FileNotFoundError:
+    pass
 
 
 def key_handler(event):
     global history_commands
-    if event == readline.KEY_UP:
+    if event == readline.SIGINT:
+        # User pressed Ctrl-C, so clear the input line
+        readline.set_line_buffer('')
+        print('^C')
+    elif event == readline.KEY_UP:
         # User pressed Up arrow, so get previous command from history
         if history_commands:
             readline.set_history_item(
@@ -42,6 +52,7 @@ def key_handler(event):
 
 def main():
     global history_commands
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--script_path", help="Path to the script to run", required=False)
@@ -63,12 +74,6 @@ def main():
     except FileNotFoundError:
         env_var2val = dict()
 
-    try:
-        with open(os.path.join(os.getenv("HOME"), ".config", "shell_gpt", "history_commands.json"), "r") as fp:
-            history_commands = json.load(fp)
-    except FileNotFoundError:
-        history_commands = list()
-
     if script_path:
         raise NotImplementedError("Script path is not implemented yet")
     else:
@@ -79,10 +84,11 @@ def main():
             if inp == "exit":
                 with open(os.path.join(os.getenv("HOME"),
                                        ".config", "shell_gpt",
-                                       "env_var2val.json"), "w") as fp:
+                                       "env_var2val.json"), "w+") as fp:
                     json.dump(env_var2val, fp)
+                readline.set_history_length(1000)
+                readline.write_history_file(history_file)
                 break
-
             if inp.startswith("SHELL: "):
                 inp = inp.replace("SHELL: ", "")
                 prompt = prompt_builder.shell_prompt(inp)
