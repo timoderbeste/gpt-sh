@@ -2,7 +2,7 @@ import os
 import platform
 from distro import name as distro_name
 
-from default_prompts import CODE_PROMPT, SHELL_PROMPT
+from default_prompts import *
 
 
 class PromptBuilder:
@@ -22,6 +22,31 @@ class PromptBuilder:
         if not inp.endswith("?"):
             inp += "?"
         return CODE_PROMPT.format(inp=inp)
+    
+    def do_prompt(self, inp: str, actions=[]) -> str:
+        inp = inp.strip()
+        if not inp.endswith("?"):
+            inp += "?"
+        return DO_PROMPT.format(inp=inp, actions=actions)
+    
+    def load_env_var_prompt(self, inp: str) -> str:
+        inp = inp.strip()
+        if not inp.endswith("?"):
+            inp += "?"
+        return LOAD_ENV_VAR_PROMPT.format(inp=inp)
+    
+    def load_file_prompt(self, inp: str) -> str:
+        inp = inp.strip()
+        if not inp.endswith("?"):
+            inp += "?"
+        return LOAD_FILE_PROMPT.format(inp=inp)
+    
+    def think_prompt_processing_prompt(self, inp: str, env_var2val: dict) -> str:
+        inp = inp.strip()
+        if not inp.endswith("?"):
+            inp += "?"
+        variables = ",".join(list(env_var2val.keys()))
+        return THINK_PROMPT_PROCESSING_PROMPT.format(inp=inp, variables=variables)
 
     def __os_name(self) -> str:
         operation_system = {

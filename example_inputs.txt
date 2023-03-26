@@ -1,0 +1,3 @@
+DO: Load the following files. "/Users/timowang/Documents/test-sgpt/desc.txt" and "/Users/timowang/Documents/test-sgpt/keys.txt"
+Running action LOAD_FILE
+DO: Show all env vars

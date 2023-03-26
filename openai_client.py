@@ -4,6 +4,7 @@ from typing import Dict, List
 
 from cache import Cache, ChatCache
 from config import config
+from utils import loading_spinner
 
 CHAT_CACHE_LENGTH = int(config.get("CHAT_CACHE_LENGTH"))
 CHAT_CACHE_PATH = Path(config.get("CHAT_CACHE_PATH"))
@@ -56,7 +57,7 @@ class OpenAIClient:
         return response.json()
 
     @chat_cache
-    def get_completion(
+    def get_gpt_response(
         self,
         message: List[str],
         model: str = "gpt-3.5-turbo",
@@ -78,3 +79,24 @@ class OpenAIClient:
         return self._request(
             message, model, temperature, top_probability, caching=caching
         )["choices"][0]["message"]["content"].strip()
+
+
+@loading_spinner
+def get_gpt_response(
+    prompt: str,
+    temperature: float,
+    top_p: float,
+    caching: bool,
+    chat: str,
+):
+    api_host = config.get("OPENAI_API_HOST")
+    api_key = config.get("OPENAI_API_KEY")
+    client = OpenAIClient(api_host, api_key)
+    return client.get_gpt_response(
+        message=prompt,
+        model="gpt-3.5-turbo",
+        temperature=temperature,
+        top_probability=top_p,
+        caching=caching,
+        chat_id=chat,
+    )

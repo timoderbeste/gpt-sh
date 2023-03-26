@@ -7,7 +7,7 @@ from time import sleep
 from typing import Callable
 
 
-from openai_client import OpenAIClient
+# from openai_client import OpenAIClient
 
 
 def loading_spinner(func: Callable) -> Callable:
@@ -71,14 +71,23 @@ def typer_writer(text: str, code: bool, shell: bool, animate: bool) -> None:
     typer.secho(text, fg=color, bold=shell_or_code)
 
 
-def echo_chat_messages(chat_id: str) -> None:
-    # Prints all messages from a specified chat ID to the console.
-    for index, message in enumerate(OpenAIClient.chat_cache.show(chat_id)):
-        color = "cyan" if index % 2 == 0 else "green"
-        typer.secho(message, fg=color)
+# def echo_chat_messages(chat_id: str) -> None:
+#     # Prints all messages from a specified chat ID to the console.
+#     for index, message in enumerate(OpenAIClient.chat_cache.show(chat_id)):
+#         color = "cyan" if index % 2 == 0 else "green"
+#         typer.secho(message, fg=color)
 
 
-def echo_chat_ids() -> None:
-    # Prints all existing chat IDs to the console.
-    for chat_id in OpenAIClient.chat_cache.list():
-        typer.echo(chat_id)
+# def echo_chat_ids() -> None:
+#     # Prints all existing chat IDs to the console.
+#     for chat_id in OpenAIClient.chat_cache.list():
+#         typer.echo(chat_id)
+
+def get_tmp_env_var_name(env_var2val: dict) -> str:
+    largest_env_var_name_idx = 0
+    for env_var in env_var2val:
+        if "TMP_ENV_VAR_" in env_var:
+            env_var_name_idx = int(env_var.split("_")[-1])
+            if env_var_name_idx > largest_env_var_name_idx:
+                largest_env_var_name_idx = env_var_name_idx
+    return f"TMP_ENV_VAR_{largest_env_var_name_idx + 1}"

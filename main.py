@@ -1,36 +1,16 @@
 import argparse
+import os
+import typer
 
+import test_env_var2val
 from config import config
-from openai_client import OpenAIClient
+from openai_client import get_gpt_response
 from prompt_builder import PromptBuilder
+from shell_actions import handle_shell_action
+from think_actions import handle_think_action
 from utils import (
-    loading_spinner,
-    echo_chat_ids,
-    echo_chat_messages,
     typer_writer,
-    get_edited_prompt,
 )
-
-
-@loading_spinner
-def get_completion(
-    prompt: str,
-    temperature: float,
-    top_p: float,
-    caching: bool,
-    chat: str,
-):
-    api_host = config.get("OPENAI_API_HOST")
-    api_key = config.get("OPENAI_API_KEY")
-    client = OpenAIClient(api_host, api_key)
-    return client.get_completion(
-        message=prompt,
-        model="gpt-3.5-turbo",
-        temperature=temperature,
-        top_probability=top_p,
-        caching=caching,
-        chat_id=chat,
-    )
 
 
 def main():
@@ -48,6 +28,8 @@ def main():
     temperature = args.temperature
 
     prompt_builder = PromptBuilder()
+    env_var2val = test_env_var2val.v1
+
     if script_path:
         raise NotImplementedError("Script path is not implemented yet")
     else:
@@ -55,14 +37,32 @@ def main():
             inp = input(">>> ")
             if inp == "exit":
                 break
-            prompt = prompt_builder.shell_prompt(inp)
+
+            if inp.startswith("SHELL: "):
+                inp = inp.replace("SHELL: ", "")
+                prompt = prompt_builder.shell_prompt(inp)
+                response = get_gpt_response(
+                    prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+                typer_writer(response, code=True,
+                             shell=True, animate=True)
+                if response.startswith("COMMAND: "):
+                    if typer.confirm("Run this command?", abort=True):
+                        os.system(response)
+                else:
+                    print(response)
+                    print(
+                        "The response is not a command. This is a bug from OpenAI.")
+            elif inp.startswith("DO: "):
+                successful = handle_shell_action(inp, env_var2val, temperature)
+                if not successful:
+                    print("Action failed. Please try again.")
+            elif inp.startswith("THINK: "):
+                handle_think_action(inp, env_var2val, temperature)
+            elif inp.startswith("CODE: "):
+                inp = inp.replace("CODE: ", "")
+                prompt = prompt_builder.code_prompt(inp)
             if cautious:
                 print(prompt)
-
-            generated_command = get_completion(
-                prompt, temperature=temperature, top_p=1, caching=False, chat=None)
-            typer_writer(generated_command, code=True,
-                         shell=True, animate=True)
 
 
 if __name__ == "__main__":
