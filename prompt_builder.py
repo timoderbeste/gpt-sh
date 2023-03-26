@@ -40,13 +40,6 @@ class PromptBuilder:
         if not inp.endswith("?"):
             inp += "?"
         return LOAD_FILE_PROMPT.format(inp=inp)
-    
-    def think_prompt_processing_prompt(self, inp: str, env_var2val: dict) -> str:
-        inp = inp.strip()
-        if not inp.endswith("?"):
-            inp += "?"
-        variables = ",".join(list(env_var2val.keys()))
-        return THINK_PROMPT_PROCESSING_PROMPT.format(inp=inp, variables=variables)
 
     def __os_name(self) -> str:
         operation_system = {
