@@ -3,7 +3,6 @@ import os
 import typer
 
 import test_env_var2val
-from config import config
 from openai_client import get_gpt_response
 from prompt_builder import PromptBuilder
 from shell_actions import handle_shell_action
@@ -28,7 +27,8 @@ def main():
     temperature = args.temperature
 
     prompt_builder = PromptBuilder()
-    env_var2val = test_env_var2val.v1
+    # env_var2val = test_env_var2val.v1
+    env_var2val = dict()
 
     if script_path:
         raise NotImplementedError("Script path is not implemented yet")
@@ -46,7 +46,8 @@ def main():
                 typer_writer(response, code=True,
                              shell=True, animate=True)
                 if response.startswith("COMMAND: "):
-                    if typer.confirm("Run this command?", abort=True):
+                    response = response.replace("COMMAND: ", "")
+                    if typer.confirm("Run this command?"):
                         os.system(response)
                 else:
                     print(response)
@@ -61,6 +62,10 @@ def main():
             elif inp.startswith("CODE: "):
                 inp = inp.replace("CODE: ", "")
                 prompt = prompt_builder.code_prompt(inp)
+                response = get_gpt_response(
+                    prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+                typer_writer(response, code=True,
+                             shell=False, animate=True)
             if cautious:
                 print(prompt)
 

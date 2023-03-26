@@ -49,7 +49,7 @@ def get_edited_prompt() -> str:
     return output
 
 
-def typer_writer(text: str, code: bool, shell: bool, animate: bool) -> None:
+def typer_writer(text: str, code: bool = False, shell: bool = False, animate: bool = True) -> None:
     """
     Writes output to the console, with optional typewriter animation and color.
 
@@ -83,11 +83,11 @@ def typer_writer(text: str, code: bool, shell: bool, animate: bool) -> None:
 #     for chat_id in OpenAIClient.chat_cache.list():
 #         typer.echo(chat_id)
 
-def get_tmp_env_var_name(env_var2val: dict) -> str:
+def get_tmp_env_var_name(env_var2val: dict, prefix="TEM_ENV_VAR_") -> str:
     largest_env_var_name_idx = 0
     for env_var in env_var2val:
-        if "TMP_ENV_VAR_" in env_var:
+        if prefix in env_var:
             env_var_name_idx = int(env_var.split("_")[-1])
             if env_var_name_idx > largest_env_var_name_idx:
                 largest_env_var_name_idx = env_var_name_idx
-    return f"TMP_ENV_VAR_{largest_env_var_name_idx + 1}"
+    return f"{prefix}{largest_env_var_name_idx + 1}"
