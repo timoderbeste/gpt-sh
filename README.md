@@ -16,8 +16,7 @@ OPENAI_API_KEY=[YourAPIKey]
 ## Dependency
 
 ```
-typer
-rich
+shell_gpt
 ```
 
 ## Usage
