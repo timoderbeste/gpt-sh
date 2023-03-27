@@ -7,7 +7,7 @@ from utils import get_tmp_env_var_name, typer_writer
 
 prompt_builder = PromptBuilder()
 ACTIONS = [
-    "LOAD_ENV_VAR", "SET_ENV_VAR", "SHOW_ENV_VARS",
+    "SET_ENV_VAR", "SHOW_ENV_VARS",
     "RENAME_ENV_VAR", "DELETE_ENV_VAR", "CLEAR_ENV_VARS",
     "LOAD_FILE", "SAVE_FILE",
 ]
@@ -32,9 +32,7 @@ def handle_shell_action(inp, env_var2val, latest_response) -> bool:
         return False
 
     action_name = response.replace("ACTION: ", "")
-    if action_name == "LOAD_ENV_VAR":
-        return handle_load_env_var(inp, env_var2val)
-    elif action_name == "LOAD_FILE":
+    if action_name == "LOAD_FILE":
         return handle_load_file(inp, env_var2val)
     elif action_name == "SAVE_FILE":
         return handle_save_file(inp, env_var2val)
@@ -45,23 +43,6 @@ def handle_shell_action(inp, env_var2val, latest_response) -> bool:
     else:
         print(f"ACTION: {action_name} is not implemented yet.")
         return False
-
-
-def handle_load_env_var(inp, env_var2val) -> bool:
-    prompt = prompt_builder.load_env_var_prompt(inp)
-    response = get_gpt_response(
-        prompt, temperature=1, top_p=1, caching=False, chat=None)
-    if not response.startswith("ENV_VARS: "):
-        typer_writer(response)
-        typer_writer(
-            "The response is not a valid action. This is a bug from OpenAI.")
-        return False
-
-    response = response.replace("ENV_VARS: ", "")
-    env_vars = response.split(",")
-    for env_var in env_vars:
-        env_var2val[env_var] = os.environ.get(env_var)
-    return env_vars
 
 
 def handle_set_env_var(inp, env_var2val, latest_response) -> bool:

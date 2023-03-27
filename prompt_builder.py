@@ -29,10 +29,6 @@ class PromptBuilder:
             inp += "?"
         return DO_PROMPT.format(inp=inp, actions=actions)
 
-    def load_env_var_prompt(self, inp: str) -> str:
-        inp = inp.strip()
-        return LOAD_ENV_VAR_PROMPT.format(inp=inp)
-
     def set_env_var_get_var_name_prompt(self, inp: str) -> str:
         inp = inp.strip()
         return SET_ENV_VAR_GET_VAR_NAME_PROMPT.format(inp=inp)

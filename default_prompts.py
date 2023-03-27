@@ -69,25 +69,6 @@ There are no exceptions to these rules.
 You must always follow them. No exceptions.
 Request: {inp}"""
 
-
-LOAD_ENV_VAR_PROMPT = """
-Identify all environment variable name to be loaded \
-  from the following natural language description.
-Output format: ENV_VARS: [NAME1], [NAME2], [NAME3], ...
-If you cannot find any, return an empty string.
-Example Input1: Load the following environment variables: FOO, BAR
-Example Output1: ENV_VARS: FOO, BAR
-Example Input2: Read the env vars $A, $B, $C
-Example Output2: ENV_VARS: A, B, C
-Example Input3: Load env vars.
-Example Output3: ENV_VARS:
-Follow all of the above rules.
-This is important you MUST follow the above rules.
-There are no exceptions to these rules.
-You must always follow them. No exceptions.
-Request: {inp}
-"""
-
 SET_ENV_VAR_GET_VAR_NAME_PROMPT = """
 Identify the name of the variable to be set.
 Output format: VAR_NAME: [NAME]
