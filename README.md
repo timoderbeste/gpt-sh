@@ -3,6 +3,18 @@
 This is an on-going development of an upgraded version of the original [Shell GPT](https://github.com/TheR1D/shell_gpt).
 In addition to executing basic shell commands as Shell GPT already supports, with Shell GPT 2, you can directly load the content of text files from your device and process them with ChatGPT.
 
+## Introduction by GPT3.5
+
+The code defines a Python script that runs a shell-like command interface using OpenAI's GPT (Generative Pretrained Transformer) language model. It imports several modules such as argparse, json, os, readline, typer, and custom-made modules such as openai_client, prompt_builder, shell_actions, think_actions, and utils.
+
+The script initializes variables to store and manage the command history for the user, and it sets up an event handler to respond to certain keyboard events such as arrow keys and the Ctrl-C (SIGINT) signal.
+
+The main function of the code defines an argument parser to handle command-line arguments specified when running the script. The script can be run with options such as a path to a script to run, cautious mode, or temperature. If a script path is provided, it raises a NotImplementedError since script execution is not implemented yet.
+
+Otherwise, the script enters an infinite loop, prompting the user to input a command. It then checks if the command is one of the specific commands that trigger different actions, such as SHELL, DO, THINK, or CODE. For SHELL commands, it sends the prompt to the GPT language model and responds with the model's generated text (which may include a command to execute). If the response is a valid command, it prompts the user to confirm whether or not to run that command. For DO and THINK, the script executes shell or Python code specified in the command. For CODE, it sends the prompt to the GPT model to generate code to return.
+
+The script also includes options for cautious mode, which displays the prompt before executing the command, and for temperature, which regulates the creativity of the GPT response. Finally, when the user inputs "exit", the script saves environment variables to a JSON file and writes the command history to a file before terminating the program.
+
 ## Setup
 
 1. Clone or download a zip version of the project.
