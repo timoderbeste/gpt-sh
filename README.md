@@ -244,6 +244,12 @@ DO: Save the value of ANALYSIS to the file /tmp/analysis.txt
 SHELL: Print out the first 3 lines of the content of /tmp/analysis.txt
 ```
 
+You can also execute pre-defined scripts line by line automatically as follows.
+
+```
+gpt-sh --script_path example/example_inputs.txt
+```
+
 ## Limitations
 
 Currently GPT-SHell is still under active development.
