@@ -7,8 +7,7 @@ from utils import get_tmp_env_var_name, typer_writer
 
 prompt_builder = PromptBuilder()
 ACTIONS = [
-    "SET_ENV_VAR", "SHOW_ENV_VARS",
-    "RENAME_ENV_VAR", "DELETE_ENV_VAR", "CLEAR_ENV_VARS",
+    "SHOW_ENV_VARS", "SET_ENV_VAR", "DELETE_ENV_VAR",
     "LOAD_FILE", "SAVE_FILE",
 ]
 
@@ -40,6 +39,8 @@ def handle_shell_action(inp, env_var2val, latest_response) -> bool:
         return handle_show_env_vars(inp, env_var2val)
     elif action_name == "SET_ENV_VAR":
         return handle_set_env_var(inp, env_var2val, latest_response)
+    elif action_name == "DELETE_ENV_VAR":
+        return handle_delete_env_var(inp, env_var2val)
     else:
         print(f"ACTION: {action_name} is not implemented yet.")
         return False
@@ -55,32 +56,51 @@ def handle_set_env_var(inp, env_var2val, latest_response) -> bool:
         typer_writer(
             "Cannot identify variable name. This is a bug from OpenAI.")
         return False
-    var_name = get_var_name_response.replace("VAR_NAME: ", "").strip()
+    to_var_name = get_var_name_response.replace("VAR_NAME: ", "").strip()
     get_content_prompt = prompt_builder.set_env_var_get_content_prompt(inp)
     get_content_response = get_gpt_response(
         get_content_prompt, temperature=1, top_p=1, caching=False, chat=None)
     get_content_response = get_content_response.replace("Output: ", "")
     if "LAST_RESPONSE" in get_content_response:
-        env_var2val[var_name] = latest_response
+        env_var2val[to_var_name] = latest_response
     elif "VAR_NAME: " in get_content_response:
         from_var_name = get_content_response.replace(
             "VAR_NAME: ", "").strip()
         if from_var_name not in env_var2val:
-            typer_writer(f"Formatted prompt: {get_content_prompt}")
-            typer_writer(f"Untouched response: {get_content_response}")
             typer_writer(
                 f"Variable {from_var_name} is not defined. Please define it first.")
             return False
-        env_var2val[var_name] = env_var2val[from_var_name]
+        env_var2val[to_var_name] = env_var2val[from_var_name]
     elif "VALUE: " in get_content_prompt:
-        env_var2val[var_name] = get_content_prompt.replace(
+        env_var2val[to_var_name] = get_content_prompt.replace(
             "VALUE: ", "").strip()
     else:
         typer_writer(
             "Cannot identify the value to be set. This is a bug from OpenAI.")
         return False
-    typer_writer(f"Setting the variable with name {var_name}")
-    return str(env_var2val[var_name])
+    typer_writer(f"Setting the variable with name {to_var_name}")
+    return str(env_var2val[to_var_name])
+
+
+def handle_delete_env_var(inp, env_var2val) -> bool:
+    prompt = prompt_builder.delete_env_var_prompt(inp)
+    response = get_gpt_response(
+        prompt, temperature=1, top_p=1, caching=False, chat=None)
+    if not response.startswith("VAR_NAMES: "):
+        typer_writer(response)
+        typer_writer(
+            "The response is not a valid action. This is a bug from OpenAI.")
+        return False
+    response = response.replace("VAR_NAMES: ", "")
+    var_names = response.split(",")
+    for var_name in var_names:
+        var_name = var_name.strip()
+        if var_name not in env_var2val:
+            typer_writer(f"Variable {var_name} is not defined. Skipping...")
+            continue
+        del env_var2val[var_name]
+        typer_writer(f"Variable {var_name} deleted.")
+    return True
 
 
 def handle_load_file(inp, env_var2val) -> bool:

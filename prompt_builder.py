@@ -37,6 +37,10 @@ class PromptBuilder:
         inp = inp.strip()
         return SET_ENV_VAR_GET_CONTENT_PROMPT.format(inp=inp)
 
+    def delete_env_var_prompt(self, inp: str) -> str:
+        inp = inp.strip()
+        return DELETE_ENV_VAR_PROMPT.format(inp=inp)
+
     def show_env_vars_prompt(self, inp: str) -> str:
         inp = inp.strip()
         return SHOW_ENV_VARS_PROMPT.format(inp=inp)

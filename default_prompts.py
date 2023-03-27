@@ -116,10 +116,29 @@ Example Request9: Set the variable A to the last response.
 Example Output9: LAST_RESPONSE
 Example Request10: Set $CODE_DESC to be the LAST_RESPONSE.
 Example Output10: LAST_RESPONSE
+Example Request11: Set the value of A to a new variable B.
+Example Output11: VALUE: B
 Do not make any explanations.
 Do not make any notes.
 Do not include anything else such as "Example", "Output", etc.
 Only output the required text.
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
+
+DELETE_ENV_VAR_PROMPT = """
+Identify the name of the variables to be deleted.
+Output format: VAR_NAMES: [NAME1], [NAME2], [NAME3], ...
+If you cannot find any, return an empty string.
+Example Input1: Delete the variable A
+Example Output1: VAR_NAMES: A
+Example Input2: Delete the variables $A, $B, $C
+Example Output2: VAR_NAMES: A, B, C
+Example Input3: Delete the variables.
+Example Output3: VAR_NAMES:
 Follow all of the above rules.
 This is important you MUST follow the above rules.
 There are no exceptions to these rules.
