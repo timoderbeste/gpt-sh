@@ -90,39 +90,45 @@ def main():
                 readline.set_history_length(1000)
                 readline.write_history_file(history_file)
                 break
-            if inp.startswith("SHELL: "):
-                inp = inp.replace("SHELL: ", "")
-                prompt = prompt_builder.shell_prompt(inp)
-                response = get_gpt_response(
-                    prompt, temperature=temperature, top_p=1, caching=False, chat=None)
-                typer_writer(response, code=True,
-                             shell=True, animate=True)
-                if response.startswith("COMMAND: "):
-                    response = response.replace("COMMAND: ", "")
-                    if typer.confirm("Run this command?"):
-                        os.system(response)
-                else:
-                    print(response)
-                    print(
-                        "The response is not a command. This is a bug from OpenAI.")
-            elif inp.startswith("DO: "):
-                response = handle_shell_action(
-                    inp, env_var2val, latest_response)
-                if not response:
-                    print("Action failed. Please try again.")
-            elif inp.startswith("THINK: "):
-                response = handle_think_action(inp, env_var2val, temperature)
-                latest_response = response
-            elif inp.startswith("CODE: "):
-                inp = inp.replace("CODE: ", "")
-                prompt = prompt_builder.code_prompt(inp)
-                response = get_gpt_response(
-                    prompt, temperature=temperature, top_p=1, caching=False, chat=None)
-                latest_response = response
-                typer_writer(response, code=True,
-                             shell=False, animate=True)
-            if cautious:
-                print(prompt)
+
+            try:
+                if inp.startswith("SHELL: "):
+                    inp = inp.replace("SHELL: ", "")
+                    prompt = prompt_builder.shell_prompt(inp)
+                    response = get_gpt_response(
+                        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+                    typer_writer(response, code=True,
+                                 shell=True, animate=True)
+                    if response.startswith("COMMAND: "):
+                        response = response.replace("COMMAND: ", "")
+                        if typer.confirm("Run this command?"):
+                            os.system(response)
+                    else:
+                        print(response)
+                        print(
+                            "The response is not a command. This is a bug from OpenAI.")
+                elif inp.startswith("DO: "):
+                    response = handle_shell_action(
+                        inp, env_var2val, latest_response)
+                    if not response:
+                        print("Action failed. Please try again.")
+                elif inp.startswith("THINK: "):
+                    response = handle_think_action(
+                        inp, env_var2val, temperature)
+                    latest_response = response
+                elif inp.startswith("CODE: "):
+                    inp = inp.replace("CODE: ", "")
+                    prompt = prompt_builder.code_prompt(inp)
+                    response = get_gpt_response(
+                        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+                    latest_response = response
+                    typer_writer(response, code=True,
+                                 shell=False, animate=True)
+                if cautious:
+                    print(prompt)
+            except Exception as e:
+                print("Something went wrong. Please try again.")
+                print(e)
 
 
 if __name__ == "__main__":

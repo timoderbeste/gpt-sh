@@ -68,6 +68,10 @@ FILE_CONTENT_VAR_1 = Created a dynamic, customizable dashboard supporti...
 FILE_CONTENT_VAR_2 = JavaScript,TypeScript,HTML5,CSS3,Python, ReactJS, ...
 ```
 
+```
+>>> DO:
+```
+
 Currently, the first 50 characters of each value is printed. In the future, a feature that let user to specify the print length will be implemented.
 
 #### LOAD_FILE
