@@ -17,7 +17,8 @@ The script also includes options for cautious mode, which displays the prompt be
 
 ## Install
 `pip install shell-gpt2`
-
+When you first uses `sgpt2`, you will be prompt to enter your OpenAI API key. 
+You can also set the following variable in `~/.config/shell_gpt/.sgptrc`.
 ```
 OPENAI_API_KEY=[YourAPIKey]
 ```
