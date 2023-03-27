@@ -5,9 +5,6 @@ In addition to executing basic shell commands as Shell GPT already supports, wit
 
 ## Introduction by GPT3.5
 ```
->>> DO: load the file "/Users/timowang/Developers/gpt-sh/main.py"
-File /Users/timowang/Developers/gpt-sh/main.py not found.
-Action failed. Please try again.
 >>> DO: load the file "/Users/timowang/Developer/gpt-sh/main.py"
 /Users/timowang/Developer/gpt-sh/main.py loaded.
 >>> DO: show vars
