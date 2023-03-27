@@ -1,7 +1,7 @@
 from setuptools import setup
 setup(
     name='shell-gpt2',
-    version='0.1.3',
+    version='0.1.4',
     description="A somewhat more advanced version of Shell GPT",
     author="Timo Wang",
     author_email="ntwang1994@gmail.com",
