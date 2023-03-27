@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import readline
+import signal
 import typer
 
 from openai_client import get_gpt_response

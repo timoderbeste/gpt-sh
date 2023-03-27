@@ -1,13 +1,11 @@
-# Shell GPT 2
+# GPT-SHell
 
 This is an on-going development of an upgraded version of the original [Shell GPT](https://github.com/TheR1D/shell_gpt).
-In addition to executing basic shell commands as Shell GPT already supports, with Shell GPT 2, you can directly load the content of text files from your device and process them with ChatGPT.
+In addition to executing basic shell commands as Shell GPT already supports, with GPT-SHell, you can directly load the content of text files from your device and process them with ChatGPT.
 
 ## Introduction by GPT3.5
 
-
 https://user-images.githubusercontent.com/7350056/227848106-d8d3d6d4-9f3e-4f40-82b4-5a7ee1f69988.mov
-
 
 The code defines a Python script that runs a shell-like command interface using OpenAI's GPT (Generative Pretrained Transformer) language model. It imports several modules such as argparse, json, os, readline, typer, and custom-made modules such as openai_client, prompt_builder, shell_actions, think_actions, and utils.
 
@@ -39,22 +37,22 @@ shell_gpt
 
 First type in the terminal `sgpt2`. This will start up the prompt.
 
-Unlike the original Shell GPT, Shell GPT 2 functions like an actual shell, where you enter a command and then get a response.
+Unlike the original Shell GPT, GPT-SHell functions like an actual shell, where you enter a command and then get a response.
 There are four types of commands: `DO`, and `THINK`, `SHELL`, `CODE`.
 
 ### DO
 
-This is a NEW command of Shell GPT 2.
-This is used to interact with Shell GPT 2 itself.
+This is a NEW command of GPT-SHell.
+This is used to interact with GPT-SHell itself.
 You can use DO command to read or write files from your device, access environment variables, etc.
 
 There are two DO commands implemented: `SHOW_ENV_VARS`, `LOAD_FILE`.
 More will be implemented in the near future.
-You do not need to know the exact name of these commands. Based on your input, Shell GPT 2 will automatically detect the action you want to take. If it cannot determine the action, it will show you a list of all actions.
+You do not need to know the exact name of these commands. Based on your input, GPT-SHell will automatically detect the action you want to take. If it cannot determine the action, it will show you a list of all actions.
 
 #### SHOW_ENV_VARS
 
-This action let you check all the environment variables of Shell GPT 2.
+This action let you check all the environment variables of GPT-SHell.
 This is NOT for checking the environment variables of your OS.
 
 When there is no environment variable, the following is shown.
@@ -118,7 +116,7 @@ LETTERS = ABC
 
 #### LOAD_FILE
 
-This action let you load the content of a file into Shell GPT 2.
+This action let you load the content of a file into GPT-SHell.
 This is one major difference or upgrade from the original Shell GPT.
 You can specify the paths of the files you want to load.
 
@@ -200,7 +198,7 @@ KEYS: ReactJS
 ### SHELL
 
 This is the same as the shell command supported by Shell GPT.
-You can describe some action you want to perform with the shell, Shell GPT 2 will translate your command into a shell script and then execute your command.
+You can describe some action you want to perform with the shell, GPT-SHell will translate your command into a shell script and then execute your command.
 
 ```
 >>> SHELL: Create five files with names from one to five and type of txt in /tmp
@@ -248,10 +246,10 @@ SHELL: Print out the first 3 lines of the content of /tmp/analysis.txt
 
 ## Limitations
 
-Currently Shell GPT 2 is still under active development.
+Currently GPT-SHell is still under active development.
 Unlike Shell GPT, which focuses on serving as a command-line interface for accessing GPT functionalities, such as a chat,
-Shell GPT 2 focuses on helping you processing files on your own device.
-No matter the task is summarizing the content of a long report, or creating new content and then saving it on your device for you directly, Shell GPT 2 (at least the future version) will be your best helper!
+GPT-SHell focuses on helping you processing files on your own device.
+No matter the task is summarizing the content of a long report, or creating new content and then saving it on your device for you directly, GPT-SHell (at least the future version) will be your best helper!
 
 ## Upcoming features
 
