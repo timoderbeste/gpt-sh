@@ -255,6 +255,8 @@ These are the features being developed right now. You can also suggest features 
 
 ### General Interactions
 
+- Support basic shell commands without making requests to OpenAI apis such as ls, cd, etc.
+
 ### DO Commands
 
 ## Acknowledgement
