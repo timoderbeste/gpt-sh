@@ -8,6 +8,7 @@ setup(
     version='0.2.0',
     description="A somewhat more advanced version of Shell GPT",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author="Timo Wang",
     author_email="ntwang1994@gmail.com",
     packages=["."],
