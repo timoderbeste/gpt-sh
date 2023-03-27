@@ -1,6 +1,7 @@
 # GPT-SHell
 
 This is an on-going development of an upgraded version of the original [Shell GPT](https://github.com/TheR1D/shell_gpt).
+The main purpose is to support task automation on your own device.
 In addition to executing basic shell commands as Shell GPT already supports, with GPT-SHell, you can directly load the content of text files from your device and process them with ChatGPT.
 
 ## Introduction by GPT3.5
