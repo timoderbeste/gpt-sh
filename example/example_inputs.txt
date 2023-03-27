@@ -5,7 +5,7 @@ DO: Set the value of DESC_CONTENT to FILE_CONTENT_VAR_1 - SET_ENV_VAR
 DO: Set the value of KEYS_CONTENT to FILE_CONTENT_VAR_2 - SET_ENV_VAR
 DO: delete the following variables: FILE_CONTENT_VAR_1, FILE_CONTENT_VAR_2
 THINK: Given the following keywords: KEYS_CONTENT.\n Given the following text: DESC_CONTENT. Identify all sentences that contain the keywords. Print with the following format: SENT: [A sentence with keywords]\nKEYS: [All keywords that occur in the sentence].
-DO: Set the variable "ANALYSIS" to be the value of the last response
+DO: Set the variable "ANALYSIS" to be the last response
 DO: Show all env vars
 DO: Save the value of ANALYSIS to the file /tmp/analysis.txt
 SHELL: Print out the first 3 lines of the content of /tmp/analysis.txt
