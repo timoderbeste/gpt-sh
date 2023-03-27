@@ -3,3 +3,5 @@ DO: Show all env vars
 THINK: Given the following keywords: FILE_CONTENT_VAR_3.\n Given the following text: FILE_CONTENT_VAR_2. Identify all sentences that contain the keywords. Print with the following format: SENT: [A sentence with keywords]\nKEYS: [All keywords that occur in the sentence].
 DO: Save the LAST_RESPONSE to a variable called "ANALYSIS"
 DO: DO: Show all env vars
+DO: Save the value of ANALYSIS to the file /tmp/analysis.txt
+SHELL: Print out the content of /tmp/analysis.txt
