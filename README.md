@@ -4,21 +4,26 @@ This is an on-going development of an upgraded version of the original [Shell GP
 In addition to executing basic shell commands as Shell GPT already supports, with GPT-SHell, you can directly load the content of text files from your device and process them with ChatGPT.
 
 ## Introduction by GPT3.5
+```
+>>> DO: load the file "/Users/timowang/Developers/gpt-sh/main.py"
+File /Users/timowang/Developers/gpt-sh/main.py not found.
+Action failed. Please try again.
+>>> DO: load the file "/Users/timowang/Developer/gpt-sh/main.py"
+/Users/timowang/Developer/gpt-sh/main.py loaded.
+>>> DO: show vars
+FILE_CONTENT_VAR_1 = import argparse
+import json
+import os
+import readl...
+>>> THINK: Explain in 100 words what the following code does. FILE_CONTENT_VAR_1
+This code defines a Python program that allows users to interact with OpenAI's GPT models in a command-line interface. The program reads history files and environment variables from the user's system, and provides functionality for saving and retrieving command history. Users can input various commands to interact with the GPT models, such as generating text responses, executing shell commands, and handling custom think actions. The program uses the Typer library to write responses to the command line and provides functionality for animating text output. Additionally, the program can handle scripts to run in GPT and passes command line arguments to the script. The program terminates when the user inputs the "exit" command.
+```
 
 ### Example Shell Usage
 https://user-images.githubusercontent.com/7350056/227848106-d8d3d6d4-9f3e-4f40-82b4-5a7ee1f69988.mov
 
 ### Example Automation with Predefined Scripts
-
-The code defines a Python script that runs a shell-like command interface using OpenAI's GPT (Generative Pretrained Transformer) language model. It imports several modules such as argparse, json, os, readline, typer, and custom-made modules such as openai_client, prompt_builder, shell_actions, think_actions, and utils.
-
-The script initializes variables to store and manage the command history for the user, and it sets up an event handler to respond to certain keyboard events such as arrow keys and the Ctrl-C (SIGINT) signal.
-
-The main function of the code defines an argument parser to handle command-line arguments specified when running the script. The script can be run with options such as a path to a script to run, cautious mode, or temperature. If a script path is provided, it raises a NotImplementedError since script execution is not implemented yet.
-
-Otherwise, the script enters an infinite loop, prompting the user to input a command. It then checks if the command is one of the specific commands that trigger different actions, such as SHELL, DO, THINK, or CODE. For SHELL commands, it sends the prompt to the GPT language model and responds with the model's generated text (which may include a command to execute). If the response is a valid command, it prompts the user to confirm whether or not to run that command. For DO and THINK, the script executes shell or Python code specified in the command. For CODE, it sends the prompt to the GPT model to generate code to return.
-
-The script also includes options for cautious mode, which displays the prompt before executing the command, and for temperature, which regulates the creativity of the GPT response. Finally, when the user inputs "exit", the script saves environment variables to a JSON file and writes the command history to a file before terminating the program.
+https://user-images.githubusercontent.com/7350056/228054865-d3f35d20-5088-4c39-8817-6619d2949bef.mov
 
 ## Install
 
