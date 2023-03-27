@@ -4,8 +4,8 @@ with open("README.md") as fp:
     long_description = fp.read()
 
 setup(
-    name='shell-gpt2',
-    version='0.2.0',
+    name='gpt-sh',
+    version='0.1.0',
     description="A somewhat more advanced version of Shell GPT",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -14,7 +14,7 @@ setup(
     packages=["."],
     entry_points={
         "console_scripts": [
-            "sgpt2 = main:main"
+            "gpt-sh = main:main"
         ],
     },
     install_requires=[
