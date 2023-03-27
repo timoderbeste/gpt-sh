@@ -139,6 +139,8 @@ Example Input2: Delete the variables $A, $B, $C
 Example Output2: VAR_NAMES: A, B, C
 Example Input3: Delete the variables.
 Example Output3: VAR_NAMES:
+Example Input4: delete vars
+Example Output4: VAR_NAMES:
 Follow all of the above rules.
 This is important you MUST follow the above rules.
 There are no exceptions to these rules.

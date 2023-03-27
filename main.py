@@ -28,7 +28,7 @@ except FileNotFoundError:
     env_var2val = dict()
 
 
-def save_and_exit():
+def save_context():
     global env_var2val
     with open(os.path.join(os.getenv("HOME"),
                            ".config", "shell_gpt",
@@ -36,11 +36,11 @@ def save_and_exit():
         json.dump(env_var2val, fp)
         readline.set_history_length(1000)
         readline.write_history_file(history_file)
-        exit(0)
 
 
 def handle_sigint(signal, frame):
-    save_and_exit()
+    save_context()
+    exit(0)
 
 
 def key_handler(event):
@@ -72,6 +72,49 @@ def key_handler(event):
             readline.set_cursor_position(current_pos + 1)
 
 
+def handle_input(inp, cautious, temperature, prompt_builder, latest_response):
+    try:
+        if inp.startswith("SHELL: "):
+            inp = inp.replace("SHELL: ", "")
+            prompt = prompt_builder.shell_prompt(inp)
+            response = get_gpt_response(
+                prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+            typer_writer(response, code=True,
+                         shell=True, animate=True)
+            if response.startswith("COMMAND: "):
+                response = response.replace("COMMAND: ", "")
+                if typer.confirm("Run this command?"):
+                    os.system(response)
+            else:
+                print(response)
+                print(
+                    "The response is not a command. This is a bug from OpenAI.")
+        elif inp.startswith("DO: "):
+            response = handle_shell_action(
+                inp, env_var2val, latest_response[0])
+            if not response:
+                print("Action failed. Please try again.")
+        elif inp.startswith("THINK: "):
+            response = handle_think_action(
+                inp, env_var2val, temperature)
+            latest_response[0] = response
+        elif inp.startswith("CODE: "):
+            inp = inp.replace("CODE: ", "")
+            prompt = prompt_builder.code_prompt(inp)
+            response = get_gpt_response(
+                prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+            latest_response[0] = response
+            typer_writer(response, code=True,
+                         shell=False, animate=True)
+        if cautious:
+            print(prompt)
+        return response
+    except Exception as e:
+        print("Something went wrong. Please try again.")
+        print(e)
+        return
+
+
 def main():
     global history_commands, env_var2val
 
@@ -89,10 +132,17 @@ def main():
     temperature = args.temperature
 
     prompt_builder = PromptBuilder()
-    latest_response = None
+    latest_response = [None]
 
     if script_path:
-        raise NotImplementedError("Script path is not implemented yet")
+        with open(script_path) as fp:
+            for line in fp:
+                typer_writer(line, code=True, shell=False, animate=True)
+                r = handle_input(line, cautious, temperature,
+                                 prompt_builder, latest_response)
+                save_context()
+                if not r:
+                    return
     else:
         readline.parse_and_bind('')
         readline.set_pre_input_hook(key_handler)
@@ -100,46 +150,11 @@ def main():
         while True:
             inp = input(">>> ")
             if inp == "exit":
-                save_and_exit()
+                save_context()
+                exit()
 
-            try:
-                if inp.startswith("SHELL: "):
-                    inp = inp.replace("SHELL: ", "")
-                    prompt = prompt_builder.shell_prompt(inp)
-                    response = get_gpt_response(
-                        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
-                    typer_writer(response, code=True,
-                                 shell=True, animate=True)
-                    if response.startswith("COMMAND: "):
-                        response = response.replace("COMMAND: ", "")
-                        if typer.confirm("Run this command?"):
-                            os.system(response)
-                    else:
-                        print(response)
-                        print(
-                            "The response is not a command. This is a bug from OpenAI.")
-                elif inp.startswith("DO: "):
-                    response = handle_shell_action(
-                        inp, env_var2val, latest_response)
-                    if not response:
-                        print("Action failed. Please try again.")
-                elif inp.startswith("THINK: "):
-                    response = handle_think_action(
-                        inp, env_var2val, temperature)
-                    latest_response = response
-                elif inp.startswith("CODE: "):
-                    inp = inp.replace("CODE: ", "")
-                    prompt = prompt_builder.code_prompt(inp)
-                    response = get_gpt_response(
-                        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
-                    latest_response = response
-                    typer_writer(response, code=True,
-                                 shell=False, animate=True)
-                if cautious:
-                    print(prompt)
-            except Exception as e:
-                print("Something went wrong. Please try again.")
-                print(e)
+            r = handle_input(inp, cautious, temperature,
+                             prompt_builder, latest_response)
 
 
 if __name__ == "__main__":

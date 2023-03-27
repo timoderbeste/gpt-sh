@@ -86,13 +86,15 @@ def handle_delete_env_var(inp, env_var2val) -> bool:
     prompt = prompt_builder.delete_env_var_prompt(inp)
     response = get_gpt_response(
         prompt, temperature=1, top_p=1, caching=False, chat=None)
-    if not response.startswith("VAR_NAMES: "):
+    if not response.startswith("VAR_NAMES:"):
         typer_writer(response)
         typer_writer(
             "The response is not a valid action. This is a bug from OpenAI.")
         return False
-    response = response.replace("VAR_NAMES: ", "")
+    response = response.replace("VAR_NAMES:", "").strip()
     var_names = response.split(",")
+    if len(var_names) == 1 and len(var_names[0]) == 0:
+        var_names = list(env_var2val.keys())
     for var_name in var_names:
         var_name = var_name.strip()
         if var_name not in env_var2val:
