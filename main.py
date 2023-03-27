@@ -137,10 +137,16 @@ def main():
     if script_path:
         with open(script_path) as fp:
             for line in fp:
+                num_trials = 0
                 typer_writer(line, code=True, shell=False, animate=True)
                 r = handle_input(line, cautious, temperature,
                                  prompt_builder, latest_response)
                 save_context()
+                while not r and num_trials < 3:
+                    print("Retrying again.")
+                    r = handle_input(line, cautious, temperature,
+                                     prompt_builder, latest_response)
+                    num_trials += 1
                 if not r:
                     return
     else:
