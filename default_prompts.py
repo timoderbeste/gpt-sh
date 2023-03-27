@@ -104,24 +104,3 @@ There are no exceptions to these rules.
 You must always follow them. No exceptions.
 Request: {inp}
 """
-
-THINK_PROMPT_PROCESSING_PROMPT = """
-Identify all variable names in the natural language text after „Request:" that can be found in the following variable list.
-Variable list: TMP_ENV_VAR_1,TMP_ENV_VAR_2
-Output format: VARIABLE_NAMES: [NAME1], [NAME2], [NAME3], ...
-If you cannot find any, return an empty string.
-Example Input1: Load the following environment variables: FOO, BAR
-Example Output1: ENV_VARS: FOO, BAR
-Example Input2: Read the env vars $A, $B, $C
-Example Output2: ENV_VARS: A, B, C
-Example Input3: Load env vars.
-Example Output3: ENV_VARS:
-Follow all of the above rules.
-There are no exceptions to these rules.
-You must always follow them. No exceptions.
-Ignore the input and output format described in „Request:“.
-Print only "VARIABLE_NAMES: [NAME1], [NAME2], [NAME3], …“.
-DO NOT PRINT ANYTHING ELSE.
-This is important you MUST follow the above rules.
-Request: {inp}
-"""
