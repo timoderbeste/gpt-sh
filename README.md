@@ -13,9 +13,8 @@ import json
 import os
 import readl...
 >>> THINK: Explain in 100 words what the following code does. FILE_CONTENT_VAR_1
-This code defines a Python program that allows users to interact with OpenAI's GPT models in a command-line interface. The program reads history files and environment variables from the user's system, and provides functionality for saving and retrieving command history. Users can input various commands to interact with the GPT models, such as generating text responses, executing shell commands, and handling custom think actions. The program uses the Typer library to write responses to the command line and provides functionality for animating text output. Additionally, the program can handle scripts to run in GPT and passes command line arguments to the script. The program terminates when the user inputs the "exit" command.
 ```
-
+This code defines a Python program that allows users to interact with OpenAI's GPT models in a command-line interface. The program reads history files and environment variables from the user's system, and provides functionality for saving and retrieving command history. Users can input various commands to interact with the GPT models, such as generating text responses, executing shell commands, and handling custom think actions. The program uses the Typer library to write responses to the command line and provides functionality for animating text output. Additionally, the program can handle scripts to run in GPT and passes command line arguments to the script. The program terminates when the user inputs the "exit" command.
 ### Example Shell Usage
 https://user-images.githubusercontent.com/7350056/227848106-d8d3d6d4-9f3e-4f40-82b4-5a7ee1f69988.mov
 
