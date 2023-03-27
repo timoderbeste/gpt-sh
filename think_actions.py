@@ -14,7 +14,7 @@ def handle_think_action(inp, env_var2val, temperature):
         inp = inp.replace(var, (env_var2val[var] if env_var2val[var] else ""))
 
     prompt = inp
-    print("Your THINK prompt is: ", prompt)
+    # print("Your THINK prompt is: ", prompt)
     response = get_gpt_response(
         prompt, temperature=temperature, top_p=1, caching=False, chat=None)
     typer_writer(response)
