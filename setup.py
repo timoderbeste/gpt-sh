@@ -5,7 +5,7 @@ with open("README.md") as fp:
 
 setup(
     name='gpt-sh',
-    version='0.1.0',
+    version='0.1.1',
     description="A somewhat more advanced version of Shell GPT",
     long_description=long_description,
     long_description_content_type='text/markdown',
