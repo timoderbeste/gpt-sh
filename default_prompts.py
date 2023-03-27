@@ -69,17 +69,93 @@ There are no exceptions to these rules.
 You must always follow them. No exceptions.
 Request: {inp}"""
 
+SET_ENV_VAR_GET_VAR_NAME_PROMPT = """
+Identify the name of the variable to be set.
+Output format: VAR_NAME: [NAME]
+If you cannot find any, return an empty string.
+Example Input1: Set the variable A to 1
+Example Output1: VAR_NAME: A
+Example Input2: Set the variable $VAR to the value of $A
+Example Output2: VAR_NAME: VAR
+Example Input3: Set the variable to 1
+Example Output3: VAR_NAME:
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
 
-LOAD_ENV_VAR_PROMPT = """
-Identify all environment variable name to be loaded \
+SET_ENV_VAR_GET_CONTENT_PROMPT = """
+Identify the value to be set.
+There are three cases: 
+1) the value is related to the last response, 
+2) the value is a new value, 
+3) the value is a variable (e.g. $A).
+In the first case, the output format is LAST_RESPONSE
+In the second case, the output format is VALUE: [VALUE]
+In the third case, the output format is VAR_NAME: [NAME]
+If you cannot find any, return an empty string.
+Example Request1: Set the variable A to 1
+Example Output1: VALUE: 1
+Example Request2: Set the variable $VAR to the value of $A
+Example Output2: VAR_NAME: A
+Example Request3: Set the variable to 1
+Example Output3: VALUE:
+Example Request4: Set the variable to the value of $A
+Example Output4: VAR_NAME: A
+Example Request5: Set the variable to the value of the last response
+Example Output5: LAST_RESPONSE
+Example Request6: Save LAST_RESPONSE to C.
+Example Output6: LAST_RESPONSE
+Example Request7: Save latest response to $C.
+Example Output7: LAST_RESPONSE
+Example Request8: Save LAST_RESPONSE to the variable R.
+Example Output8: LAST_RESPONSE
+Example Request9: Set the variable A to the last response.
+Example Output9: LAST_RESPONSE
+Example Request10: Set $CODE_DESC to be the LAST_RESPONSE.
+Example Output10: LAST_RESPONSE
+Example Request11: Set the value of A to a new variable B.
+Example Output11: VALUE: B
+Do not make any explanations.
+Do not make any notes.
+Do not include anything else such as "Example", "Output", etc.
+Only output the required text.
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
+
+DELETE_ENV_VAR_PROMPT = """
+Identify the name of the variables to be deleted.
+Output format: VAR_NAMES: [NAME1], [NAME2], [NAME3], ...
+If you cannot find any, return an empty string.
+Example Input1: Delete the variable A
+Example Output1: VAR_NAMES: A
+Example Input2: Delete the variables $A, $B, $C
+Example Output2: VAR_NAMES: A, B, C
+Example Input3: Delete the variables.
+Example Output3: VAR_NAMES:
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
+
+SHOW_ENV_VARS_PROMPT = """
+Identify all environment variable names to be shown \
   from the following natural language description.
 Output format: ENV_VARS: [NAME1], [NAME2], [NAME3], ...
 If you cannot find any, return an empty string.
-Example Input1: Load the following environment variables: FOO, BAR
+Example Input1: Show the following environment variables: FOO, BAR
 Example Output1: ENV_VARS: FOO, BAR
-Example Input2: Read the env vars $A, $B, $C
+Example Input2: Show the env vars $A, $B, $C
 Example Output2: ENV_VARS: A, B, C
-Example Input3: Load env vars.
+Example Input3: Show env vars.
 Example Output3: ENV_VARS:
 Follow all of the above rules.
 This is important you MUST follow the above rules.
@@ -105,23 +181,26 @@ You must always follow them. No exceptions.
 Request: {inp}
 """
 
-THINK_PROMPT_PROCESSING_PROMPT = """
-Identify all variable names in the natural language text after „Request:" that can be found in the following variable list.
-Variable list: TMP_ENV_VAR_1,TMP_ENV_VAR_2
-Output format: VARIABLE_NAMES: [NAME1], [NAME2], [NAME3], ...
-If you cannot find any, return an empty string.
-Example Input1: Load the following environment variables: FOO, BAR
-Example Output1: ENV_VARS: FOO, BAR
-Example Input2: Read the env vars $A, $B, $C
-Example Output2: ENV_VARS: A, B, C
-Example Input3: Load env vars.
-Example Output3: ENV_VARS:
+SAVE_FILE_PROMPT = """
+Identify the variable name whose value is to be saved.
+Identify the file path to save the variable value.
+Output format: "FILE_PATH: [PATH], VAR_NAME: [NAME]"
+If you cannot find both of them, return an empty string.
+Avoid printing anything such as "Output: " before "FILE_PATH:..."
+Do NOT print anything such as "Output: " before "FILE_PATH:..."
+Stop printing anything such as "Output: " before "FILE_PATH:..." as prefix
+Example Input1: Save the the content of A to a.txt
+Example Output1: FILE_PATH: a.txt, VAR_NAME: A
+Example Input2: Save the value of $VAR to b.txt
+Example Output2: FILE_PATH: b.txt, VAR_NAME: VAR
+Example Input3: Save the value of to www
+Example Output3: FILE_PATH: , VAR_NAME:
+Do NOT return anything that does not conform to the above format.
+Do NOT print anything such as "Output: " before "FILE_PATH:..."
+Do NOT print anything such as "Output: " before "FILE_PATH:..."
 Follow all of the above rules.
+This is important you MUST follow the above rules.
 There are no exceptions to these rules.
 You must always follow them. No exceptions.
-Ignore the input and output format described in „Request:“.
-Print only "VARIABLE_NAMES: [NAME1], [NAME2], [NAME3], …“.
-DO NOT PRINT ANYTHING ELSE.
-This is important you MUST follow the above rules.
 Request: {inp}
 """

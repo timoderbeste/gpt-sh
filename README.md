@@ -3,11 +3,27 @@
 This is an on-going development of an upgraded version of the original [Shell GPT](https://github.com/TheR1D/shell_gpt).
 In addition to executing basic shell commands as Shell GPT already supports, with Shell GPT 2, you can directly load the content of text files from your device and process them with ChatGPT.
 
-## Setup
+## Introduction by GPT3.5
 
-1. Clone or download a zip version of the project.
-2. Since Shell GPT 2 is an extended version of Shell GPT, you need to install Shell GPT as well with `pip install shell_gpt`.
-3. Set your OPENAI_API_KEY in `~/.config/shell_gpt/.sgptrc` as follows:
+
+https://user-images.githubusercontent.com/7350056/227848106-d8d3d6d4-9f3e-4f40-82b4-5a7ee1f69988.mov
+
+
+The code defines a Python script that runs a shell-like command interface using OpenAI's GPT (Generative Pretrained Transformer) language model. It imports several modules such as argparse, json, os, readline, typer, and custom-made modules such as openai_client, prompt_builder, shell_actions, think_actions, and utils.
+
+The script initializes variables to store and manage the command history for the user, and it sets up an event handler to respond to certain keyboard events such as arrow keys and the Ctrl-C (SIGINT) signal.
+
+The main function of the code defines an argument parser to handle command-line arguments specified when running the script. The script can be run with options such as a path to a script to run, cautious mode, or temperature. If a script path is provided, it raises a NotImplementedError since script execution is not implemented yet.
+
+Otherwise, the script enters an infinite loop, prompting the user to input a command. It then checks if the command is one of the specific commands that trigger different actions, such as SHELL, DO, THINK, or CODE. For SHELL commands, it sends the prompt to the GPT language model and responds with the model's generated text (which may include a command to execute). If the response is a valid command, it prompts the user to confirm whether or not to run that command. For DO and THINK, the script executes shell or Python code specified in the command. For CODE, it sends the prompt to the GPT model to generate code to return.
+
+The script also includes options for cautious mode, which displays the prompt before executing the command, and for temperature, which regulates the creativity of the GPT response. Finally, when the user inputs "exit", the script saves environment variables to a JSON file and writes the command history to a file before terminating the program.
+
+## Install
+
+`pip install shell-gpt2`
+When you first uses `sgpt2`, you will be prompt to enter your OpenAI API key.
+You can also set the following variable in `~/.config/shell_gpt/.sgptrc`.
 
 ```
 OPENAI_API_KEY=[YourAPIKey]
@@ -20,6 +36,8 @@ shell_gpt
 ```
 
 ## Usage
+
+First type in the terminal `sgpt2`. This will start up the prompt.
 
 Unlike the original Shell GPT, Shell GPT 2 functions like an actual shell, where you enter a command and then get a response.
 There are four types of commands: `DO`, and `THINK`, `SHELL`, `CODE`.
@@ -54,7 +72,49 @@ FILE_CONTENT_VAR_1 = Created a dynamic, customizable dashboard supporti...
 FILE_CONTENT_VAR_2 = JavaScript,TypeScript,HTML5,CSS3,Python, ReactJS, ...
 ```
 
+```
+>>> DO: Show var: FILE_CONTENT_VAR_1
+FILE_CONTENT_VAR_1 = Created a dynamic, customizable dashboard supporti...
+```
+
 Currently, the first 50 characters of each value is printed. In the future, a feature that let user to specify the print length will be implemented.
+
+#### SET_ENV_VAR
+
+This action let you save values to a variable.
+The value can be a raw value, such as a number or a string.
+The value can be the one stored in another variable.
+The value can be the latest response from CODE or THINK commands.
+
+```
+>>> DO: Set the value of KEYS_CONTENT to FILE_CONTENT_VAR_2 SET_ENV_VAR
+Setting the variable with name KEYS_CONTENT
+>>> DO: Set the value of DESC_CONTENT to FILE_CONTENT_VAR_1 SET_ENV_VAR
+Setting the variable with name DESC_CONTENT
+>>> DO: Show all env vars
+DESC_CONTENT = Created a dynamic, customizable dashboard supporti...
+KEYS_CONTENT = JavaScript, TypeScript, HTML5, CSS3, Python, React...
+
+>>> DO: Set the value of LETTERS to be "ABC"
+Setting the variable with name LETTERS
+>>> DO: show var: LETTERS
+ LETTERS = ABC
+```
+
+#### DELETE_ENV_VAR
+
+This action let you delete a variable that is no longer needed.
+
+```
+>>> DO: delete the vars: FILE_CONTENT_VAR_1, FILE_CONTENT_VAR_2
+Variable FILE_CONTENT_VAR_1 deleted.
+Variable FILE_CONTENT_VAR_2 deleted.
+>>> DO: show vars
+DESC_CONTENT = Created a dynamic, customizable dashboard supporti...
+KEYS_CONTENT = JavaScript, TypeScript, HTML5, CSS3, Python, React...
+ANALYSIS = SENT: Created a dynamic, customizable dashboard su...
+LETTERS = ABC
+```
 
 #### LOAD_FILE
 
@@ -67,6 +127,23 @@ You can specify the paths of the files you want to load.
 >>> DO: Show all env vars
 FILE_CONTENT_VAR_1 = Created a dynamic, customizable dashboard supporti...
 FILE_CONTENT_VAR_2 = JavaScript,TypeScript,HTML5,CSS3,Python, ReactJS, ...
+```
+
+#### SAVE_FILE
+
+This action let you save the value of a variable to your local file system.
+
+```
+>>> DO: save the value of ANALYSIS to /tmp/analysis.txt
+Saving ANALYSIS to /tmp/analysis.txt.
+>>> SHELL: show the content of /tmp/analysis.txt and only show the first 5 lines
+COMMAND: head -n 5 /tmp/analysis.txt
+Run this command? [y/N]: y
+SENT: Created a dynamic, customizable dashboard supporting various widgets to display the issue count for each template, the trend of issue count throughout a certain number of days, etc. using Material-UI components for React.
+KEYS: ReactJS, Material-UI
+
+SENT: Refactored common properties of widgets such as widget titles, subtitles, and configuration menu wrapper to a shared component, enabling cleaner implementation and easier creation of new widgets.
+KEYS:
 ```
 
 ### THINK
@@ -147,6 +224,28 @@ int sumArray(int arr[], int len) {
 }
 ```
 
+## Full Example
+
+In the `example` directory, you can find three `.txt` files.
+The file `desc.txt` contains the description of a frontend project and
+`keys.txt` contains skill keywords related to frontend job market.
+We want to identify sentences in `desc.txt` with keywords that are listed in `keys.txt`.
+Following the commands in `example_inputs.txt`, shown below as well, we can first load the files,
+build a prompt with the content of the files, get analysis report, and save the report to a local file.
+
+```
+DO: Load the following files. "/Users/timowang/Developer/shell_gpt2/example/desc.txt" and "/Users/timowang/Developer/shell_gpt2/example/keys.txt"
+DO: Show all env vars
+DO: Set the value of DESC_CONTENT to FILE_CONTENT_VAR_1
+DO: Set the value of KEYS_CONTENT to FILE_CONTENT_VAR_2
+DO: delete the following variables: FILE_CONTENT_VAR_1, FILE_CONTENT_VAR_2
+THINK: Given the following keywords: KEYS_CONTENT.\n Given the following text: DESC_CONTENT. Identify all sentences that contain the keywords. Print with the following format: SENT: [A sentence with keywords]\nKEYS: [All keywords that occur in the sentence].
+DO: Save the LAST_RESPONSE to a variable called "ANALYSIS"
+DO: Show all env vars
+DO: Save the value of ANALYSIS to the file /tmp/analysis.txt
+SHELL: Print out the first 3 lines of the content of /tmp/analysis.txt
+```
+
 ## Limitations
 
 Currently Shell GPT 2 is still under active development.
@@ -156,17 +255,13 @@ No matter the task is summarizing the content of a long report, or creating new 
 
 ## Upcoming features
 
-These are the features being developed right now.
+These are the features being developed right now. You can also suggest features in the Discussion/Issues section.
 
 ### General Interactions
 
-- Support left and right arrows to change text content
-- Support a history of recent commands accessible through up and down arrows
+- Support basic shell commands without making requests to OpenAI apis such as ls, cd, etc.
 
 ### DO Commands
-
-- Rename an existing variable
-- Save the values of a variable to a file given a file path
 
 ## Acknowledgement
 

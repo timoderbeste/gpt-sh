@@ -5,7 +5,7 @@ with open("README.md") as fp:
 
 setup(
     name='shell-gpt2',
-    version='0.1.3',
+    version='0.1.8',
     description="A somewhat more advanced version of Shell GPT",
     long_description=long_description,
     author="Timo Wang",
