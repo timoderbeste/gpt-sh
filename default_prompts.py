@@ -88,6 +88,64 @@ You must always follow them. No exceptions.
 Request: {inp}
 """
 
+SET_ENV_VAR_GET_VAR_NAME_PROMPT = """
+Identify the name of the variable to be set.
+Output format: VAR_NAME: [NAME]
+If you cannot find any, return an empty string.
+Example Input1: Set the variable A to 1
+Example Output1: VAR_NAME: A
+Example Input2: Set the variable $VAR to the value of $A
+Example Output2: VAR_NAME: VAR
+Example Input3: Set the variable to 1
+Example Output3: VAR_NAME:
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
+
+SET_ENV_VAR_GET_CONTENT_PROMPT = """
+Identify the value to be set.
+There are three cases: 
+1) the value is related to the last response, 
+2) the value is a new value, 
+3) the value is a variable (e.g. $A).
+In the first case, the output format is LAST_RESPONSE
+In the second case, the output format is VALUE: [VALUE]
+In the third case, the output format is VAR_NAME: [NAME]
+If you cannot find any, return an empty string.
+Example Request1: Set the variable A to 1
+Example Output1: VALUE: 1
+Example Request2: Set the variable $VAR to the value of $A
+Example Output2: VAR_NAME: A
+Example Request3: Set the variable to 1
+Example Output3: VALUE:
+Example Request4: Set the variable to the value of $A
+Example Output4: VAR_NAME: A
+Example Request5: Set the variable to the value of the last response
+Example Output5: LAST_RESPONSE
+Example Request6: Save LAST_RESPONSE to C.
+Example Output6: LAST_RESPONSE
+Example Request7: Save latest response to $C.
+Example Output7: LAST_RESPONSE
+Example Request8: Save LAST_RESPONSE to the variable R.
+Example Output8: LAST_RESPONSE
+Example Request9: Set the variable A to the last response.
+Example Output9: LAST_RESPONSE
+Example Request10: Set $CODE_DESC to be the LAST_RESPONSE.
+Example Output10: LAST_RESPONSE
+Do not make any explanations.
+Do not make any notes.
+Do not include anything else such as "Example", "Output", etc.
+Only output the required text.
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
+
 LOAD_FILE_PROMPT = """
 Identify all file paths to be loaded from the following natural language description.
 Output format: FILE_PATHS: [PATH1], [PATH2], [PATH3], ...

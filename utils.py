@@ -65,7 +65,7 @@ def typer_writer(text: str, code: bool = False, shell: bool = False, animate: bo
     if animate and not shell_or_code:
         for char in text:
             typer.secho(char, nl=False, fg=color, bold=shell_or_code)
-            sleep(0.015)
+            sleep(0.005)
         # Add new line at the end, to prevent % from appearing.
         typer.echo("")
         return

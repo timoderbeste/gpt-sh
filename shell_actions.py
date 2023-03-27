@@ -7,17 +7,17 @@ from utils import get_tmp_env_var_name, typer_writer
 
 prompt_builder = PromptBuilder()
 ACTIONS = [
-    "LOAD_ENV_VAR", "SAVE_ENV_VAR", "SHOW_ENV_VARS",
-    "RENAME_ENV_VAR", "DELETE_ENV_VAR", "CLEAR_ENV_VARS", "SET_ENV_VAR",
+    "LOAD_ENV_VAR", "SET_ENV_VAR", "SHOW_ENV_VARS",
+    "RENAME_ENV_VAR", "DELETE_ENV_VAR", "CLEAR_ENV_VARS",
     "LOAD_FILE", "SAVE_FILE",
 ]
 
 
-def handle_shell_action(inp, env_var2val, temperature) -> bool:
+def handle_shell_action(inp, env_var2val, latest_response) -> bool:
     inp = inp.replace("DO: ", "")
     prompt = prompt_builder.do_prompt(inp, actions=ACTIONS)
     response = get_gpt_response(
-        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+        prompt, temperature=1, top_p=1, caching=False, chat=None)
     if not response.startswith("ACTION: "):
         print(response)
         typer_writer(
@@ -28,27 +28,29 @@ def handle_shell_action(inp, env_var2val, temperature) -> bool:
     if "," in response or response not in ACTIONS:
         typer_writer(
             "Your input leads to multiple possible actions. Please be more specific.")
-        typer_writer("Available actions: ", ACTIONS)
+        typer_writer(f"Available actions: {ACTIONS}",)
         return False
 
     action_name = response.replace("ACTION: ", "")
     if action_name == "LOAD_ENV_VAR":
-        return handle_load_env_var(inp, env_var2val, temperature)
+        return handle_load_env_var(inp, env_var2val)
     elif action_name == "LOAD_FILE":
-        return handle_load_file(inp, env_var2val, temperature)
+        return handle_load_file(inp, env_var2val)
     elif action_name == "SAVE_FILE":
-        return handle_save_file(inp, env_var2val, temperature)
+        return handle_save_file(inp, env_var2val)
     elif action_name == "SHOW_ENV_VARS":
         return handle_show_env_vars(env_var2val)
+    elif action_name == "SET_ENV_VAR":
+        return handle_set_env_var(inp, env_var2val, latest_response)
     else:
         print(f"ACTION: {action_name} is not implemented yet.")
         return False
 
 
-def handle_load_env_var(inp, env_var2val, temperature) -> bool:
+def handle_load_env_var(inp, env_var2val) -> bool:
     prompt = prompt_builder.load_env_var_prompt(inp)
     response = get_gpt_response(
-        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+        prompt, temperature=1, top_p=1, caching=False, chat=None)
     if not response.startswith("ENV_VARS: "):
         typer_writer(response)
         typer_writer(
@@ -59,13 +61,51 @@ def handle_load_env_var(inp, env_var2val, temperature) -> bool:
     env_vars = response.split(",")
     for env_var in env_vars:
         env_var2val[env_var] = os.environ.get(env_var)
-    return True
+    return env_vars
 
 
-def handle_load_file(inp, env_var2val, temperature) -> bool:
+def handle_set_env_var(inp, env_var2val, latest_response) -> bool:
+    get_var_name_prompt = prompt_builder.set_env_var_get_var_name_prompt(inp)
+    get_var_name_response = get_gpt_response(
+        get_var_name_prompt, temperature=1, top_p=1, caching=False, chat=None)
+    get_var_name_response = get_var_name_response.replace("Output: ", "")
+    if not get_var_name_response.startswith("VAR_NAME: "):
+        typer_writer(get_var_name_response)
+        typer_writer(
+            "Cannot identify variable name. This is a bug from OpenAI.")
+        return False
+    var_name = get_var_name_response.replace("VAR_NAME: ", "").strip()
+    get_content_prompt = prompt_builder.set_env_var_get_content_prompt(inp)
+    get_content_response = get_gpt_response(
+        get_content_prompt, temperature=1, top_p=1, caching=False, chat=None)
+    get_content_response = get_content_response.replace("Output: ", "")
+    if "LAST_RESPONSE" in get_content_response:
+        env_var2val[var_name] = latest_response
+    elif "VAR_NAME: " in get_content_response:
+        from_var_name = get_content_response.replace(
+            "VAR_NAME: ", "").strip()
+        if from_var_name not in env_var2val:
+            typer_writer(f"Formatted prompt: {get_content_prompt}")
+            typer_writer(f"Untouched response: {get_content_response}")
+            typer_writer(
+                f"Variable {from_var_name} is not defined. Please define it first.")
+            return False
+        env_var2val[var_name] = env_var2val[from_var_name]
+    elif "VALUE: " in get_content_prompt:
+        env_var2val[var_name] = get_content_prompt.replace(
+            "VALUE: ", "").strip()
+    else:
+        typer_writer(
+            "Cannot identify the value to be set. This is a bug from OpenAI.")
+        return False
+    typer_writer(f"Setting the variable with name {var_name}")
+    return str(env_var2val[var_name])
+
+
+def handle_load_file(inp, env_var2val) -> bool:
     prompt = prompt_builder.load_file_prompt(inp)
     response = get_gpt_response(
-        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+        prompt, temperature=1, top_p=1, caching=False, chat=None)
     if not response.startswith("FILE_PATHS: "):
         typer_writer(response)
         typer_writer(
@@ -88,10 +128,10 @@ def handle_load_file(inp, env_var2val, temperature) -> bool:
     return True
 
 
-def handle_save_file(inp, env_var2val, temperature) -> bool:
+def handle_save_file(inp, env_var2val) -> bool:
     prompt = prompt_builder.save_file_prompt(inp)
     response = get_gpt_response(
-        prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+        prompt, temperature=1, top_p=1, caching=False, chat=None)
     if not "FILE_PATH: " in response and "VAR_NAME: " in response:
         typer_writer(response)
         typer_writer(
@@ -118,6 +158,7 @@ def handle_show_env_vars(env_var2val) -> bool:
         return True
     else:
         for env_var in env_var2val:
-            typer_writer(f"{env_var} = {env_var2val[env_var][:50]}" +
-                         "..." if len(env_var2val[env_var]) > 50 else "")
+            val = env_var2val[env_var]
+            typer_writer(f"{env_var} = {val[:50] if val else None}" +
+                         ("..." if val and len(val) > 50 else ""))
         return True

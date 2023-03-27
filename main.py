@@ -67,6 +67,7 @@ def main():
     temperature = args.temperature
 
     prompt_builder = PromptBuilder()
+    latest_response = None
 
     try:
         with open(os.path.join(os.getenv("HOME"), ".config", "shell_gpt", "env_var2val.json"), "r") as fp:
@@ -105,16 +106,19 @@ def main():
                     print(
                         "The response is not a command. This is a bug from OpenAI.")
             elif inp.startswith("DO: "):
-                successful = handle_shell_action(inp, env_var2val, temperature)
-                if not successful:
+                response = handle_shell_action(
+                    inp, env_var2val, latest_response)
+                if not response:
                     print("Action failed. Please try again.")
             elif inp.startswith("THINK: "):
-                handle_think_action(inp, env_var2val, temperature)
+                response = handle_think_action(inp, env_var2val, temperature)
+                latest_response = response
             elif inp.startswith("CODE: "):
                 inp = inp.replace("CODE: ", "")
                 prompt = prompt_builder.code_prompt(inp)
                 response = get_gpt_response(
                     prompt, temperature=temperature, top_p=1, caching=False, chat=None)
+                latest_response = response
                 typer_writer(response, code=True,
                              shell=False, animate=True)
             if cautious:
