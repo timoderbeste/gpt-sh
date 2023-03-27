@@ -239,7 +239,7 @@ THINK: Given the following keywords: KEYS_CONTENT.\n Given the following text: D
 DO: Save the LAST_RESPONSE to a variable called "ANALYSIS"
 DO: Show all env vars
 DO: Save the value of ANALYSIS to the file /tmp/analysis.txt
-SHELL: Print out the content of /tmp/analysis.txt
+SHELL: Print out the first 3 lines of the content of /tmp/analysis.txt
 ```
 
 ## Limitations
