@@ -19,8 +19,8 @@ The script also includes options for cautious mode, which displays the prompt be
 
 ## Install
 
-`pip install shell-gpt2`
-When you first uses `sgpt2`, you will be prompt to enter your OpenAI API key.
+`pip install gpt-sh`
+When you first uses `gpt-sh`, you will be prompt to enter your OpenAI API key.
 You can also set the following variable in `~/.config/shell_gpt/.sgptrc`.
 
 ```
@@ -35,7 +35,7 @@ shell_gpt
 
 ## Usage
 
-First type in the terminal `sgpt2`. This will start up the prompt.
+First type in the terminal `gpt-sh`. This will start up the prompt.
 
 Unlike the original Shell GPT, GPT-SHell functions like an actual shell, where you enter a command and then get a response.
 There are four types of commands: `DO`, and `THINK`, `SHELL`, `CODE`.
