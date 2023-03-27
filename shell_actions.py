@@ -72,7 +72,7 @@ def handle_set_env_var(inp, env_var2val, latest_response) -> bool:
             return False
         env_var2val[to_var_name] = env_var2val[from_var_name]
     elif "VALUE: " in get_content_prompt:
-        env_var2val[to_var_name] = get_content_prompt.replace(
+        env_var2val[to_var_name] = get_content_response.replace(
             "VALUE: ", "").strip()
     else:
         typer_writer(
