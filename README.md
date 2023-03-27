@@ -15,12 +15,10 @@ Otherwise, the script enters an infinite loop, prompting the user to input a com
 
 The script also includes options for cautious mode, which displays the prompt before executing the command, and for temperature, which regulates the creativity of the GPT response. Finally, when the user inputs "exit", the script saves environment variables to a JSON file and writes the command history to a file before terminating the program.
 
-## Setup
-
-1. Clone or download a zip version of the project.
-2. Since Shell GPT 2 is an extended version of Shell GPT, you need to install Shell GPT as well with `pip install shell_gpt`.
-3. Set your OPENAI_API_KEY in `~/.config/shell_gpt/.sgptrc` as follows:
-
+## Install
+`pip install shell-gpt2`
+When you first uses `sgpt2`, you will be prompt to enter your OpenAI API key. 
+You can also set the following variable in `~/.config/shell_gpt/.sgptrc`.
 ```
 OPENAI_API_KEY=[YourAPIKey]
 ```
