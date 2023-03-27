@@ -5,10 +5,10 @@ setup(
     description="A somewhat more advanced version of Shell GPT",
     author="Timo Wang",
     author_email="ntwang1994@gmail.com",
-    packages=["sgpt2"],
+    packages=["."],
     entry_points={
         "console_scripts": [
-            "shell-gpt2 = sgpt2.main:main"
+            "sgpt2 = sgpt2.main:main"
         ],
     },
     install_requires=[
