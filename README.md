@@ -5,7 +5,10 @@ In addition to executing basic shell commands as Shell GPT already supports, wit
 
 ## Introduction by GPT3.5
 
+### Example Shell Usage
 https://user-images.githubusercontent.com/7350056/227848106-d8d3d6d4-9f3e-4f40-82b4-5a7ee1f69988.mov
+
+### Example Automation with Predefined Scripts
 
 The code defines a Python script that runs a shell-like command interface using OpenAI's GPT (Generative Pretrained Transformer) language model. It imports several modules such as argparse, json, os, readline, typer, and custom-made modules such as openai_client, prompt_builder, shell_actions, think_actions, and utils.
 
