@@ -251,17 +251,11 @@ No matter the task is summarizing the content of a long report, or creating new 
 
 ## Upcoming features
 
-These are the features being developed right now.
+These are the features being developed right now. You can also suggest features in the Discussion/Issues section.
 
 ### General Interactions
 
-- Support left and right arrows to change text content
-- Support a history of recent commands accessible through up and down arrows
-
 ### DO Commands
-
-- Rename an existing variable
-- Save the values of a variable to a file given a file path
 
 ## Acknowledgement
 
