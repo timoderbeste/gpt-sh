@@ -41,6 +41,10 @@ class PromptBuilder:
         inp = inp.strip()
         return SET_ENV_VAR_GET_CONTENT_PROMPT.format(inp=inp)
 
+    def show_env_vars_prompt(self, inp: str) -> str:
+        inp = inp.strip()
+        return SHOW_ENV_VARS_PROMPT.format(inp=inp)
+
     def load_file_prompt(self, inp: str) -> str:
         inp = inp.strip()
         return LOAD_FILE_PROMPT.format(inp=inp)

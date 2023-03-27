@@ -39,7 +39,7 @@ def handle_shell_action(inp, env_var2val, latest_response) -> bool:
     elif action_name == "SAVE_FILE":
         return handle_save_file(inp, env_var2val)
     elif action_name == "SHOW_ENV_VARS":
-        return handle_show_env_vars(env_var2val)
+        return handle_show_env_vars(inp, env_var2val)
     elif action_name == "SET_ENV_VAR":
         return handle_set_env_var(inp, env_var2val, latest_response)
     else:
@@ -152,13 +152,37 @@ def handle_save_file(inp, env_var2val) -> bool:
         return False
 
 
-def handle_show_env_vars(env_var2val) -> bool:
+def handle_show_env_vars(inp, env_var2val) -> bool:
     if len(env_var2val) == 0:
         typer_writer("No environment variables loaded.")
         return True
     else:
-        for env_var in env_var2val:
-            val = env_var2val[env_var]
-            typer_writer(f"{env_var} = {val[:50] if val else None}" +
-                         ("..." if val and len(val) > 50 else ""))
+        prompt = prompt_builder.show_env_vars_prompt(inp)
+        response = get_gpt_response(
+            prompt, temperature=1, top_p=1, caching=False, chat=None)
+        if not response.startswith("ENV_VARS:"):
+            typer_writer(response)
+            typer_writer(
+                "The response is not a valid action. This is a bug from OpenAI.")
+            return False
+        env_vars = response.replace("ENV_VARS:", "").split(",")
+
+        show_full = True
+        if "" in env_vars:
+            env_vars.remove("")
+        if len(env_vars) == 0:
+            show_full = False
+            env_vars = env_var2val.keys()
+
+        if len(env_vars) == 0:
+            typer_writer("No environment variables loaded.")
+            return True
+
+        for env_var in env_vars:
+            val = env_var2val[env_var.strip()]
+            if show_full:
+                typer_writer(f"{env_var} = {val}")
+            else:
+                typer_writer(f"{env_var} = {val[:50] if val else None}" +
+                             ("..." if val and len(val) > 50 else ""))
         return True

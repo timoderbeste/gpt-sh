@@ -146,6 +146,24 @@ You must always follow them. No exceptions.
 Request: {inp}
 """
 
+SHOW_ENV_VARS_PROMPT = """
+Identify all environment variable names to be shown \
+  from the following natural language description.
+Output format: ENV_VARS: [NAME1], [NAME2], [NAME3], ...
+If you cannot find any, return an empty string.
+Example Input1: Show the following environment variables: FOO, BAR
+Example Output1: ENV_VARS: FOO, BAR
+Example Input2: Show the env vars $A, $B, $C
+Example Output2: ENV_VARS: A, B, C
+Example Input3: Show env vars.
+Example Output3: ENV_VARS:
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""
+
 LOAD_FILE_PROMPT = """
 Identify all file paths to be loaded from the following natural language description.
 Output format: FILE_PATHS: [PATH1], [PATH2], [PATH3], ...
