@@ -1,0 +1,11 @@
+DO: clear all vars
+DO: Load the file with path "/Users/timowang/Developer/gpt-sh/example/example_desc_keys.md"
+THINK: Given the following markdown text. Parse it and return me the content of the "Description" section without the title. Return only the text. FILE_CONTENT_VAR_1
+DO: Set DESC with last response - SET_ENV_VAR
+THINK: Given the following markdown text. Parse it and return me the content of the "Keywords" section without the title. Return only the text. FILE_CONTENT_VAR_1
+DO: Set KEYS with last response - SET_ENV_VAR
+THINK: Given the following keywords: KEYS.\n Given the following text: DESC. Identify all sentences that contain the keywords. Print with the following format: SENT: [A sentence with keywords]\n [[All keywords that occur in the sentence]].
+DO: Set the variable "ANALYSIS" to be the last response
+DO: Show all env vars
+DO: Save the value of ANALYSIS to the file /tmp/analysis.txt
+SHELL: Print out the first 3 lines of the content of /tmp/analysis.txt

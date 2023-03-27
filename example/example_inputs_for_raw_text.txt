@@ -1,3 +1,4 @@
+
 DO: delete vars
 DO: Load the following files. "/Users/timowang/Developer/gpt-sh/example/desc.txt" and "/Users/timowang/Developer/gpt-sh/example/keys.txt"
 DO: Show all env vars
