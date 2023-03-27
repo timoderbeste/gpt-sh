@@ -104,3 +104,27 @@ There are no exceptions to these rules.
 You must always follow them. No exceptions.
 Request: {inp}
 """
+
+SAVE_FILE_PROMPT = """
+Identify the variable name whose value is to be saved.
+Identify the file path to save the variable value.
+Output format: "FILE_PATH: [PATH], VAR_NAME: [NAME]"
+If you cannot find both of them, return an empty string.
+Avoid printing anything such as "Output: " before "FILE_PATH:..."
+Do NOT print anything such as "Output: " before "FILE_PATH:..."
+Stop printing anything such as "Output: " before "FILE_PATH:..." as prefix
+Example Input1: Save the the content of A to a.txt
+Example Output1: FILE_PATH: a.txt, VAR_NAME: A
+Example Input2: Save the value of $VAR to b.txt
+Example Output2: FILE_PATH: b.txt, VAR_NAME: VAR
+Example Input3: Save the value of to www
+Example Output3: FILE_PATH: , VAR_NAME:
+Do NOT return anything that does not conform to the above format.
+Do NOT print anything such as "Output: " before "FILE_PATH:..."
+Do NOT print anything such as "Output: " before "FILE_PATH:..."
+Follow all of the above rules.
+This is important you MUST follow the above rules.
+There are no exceptions to these rules.
+You must always follow them. No exceptions.
+Request: {inp}
+"""

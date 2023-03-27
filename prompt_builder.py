@@ -16,30 +16,32 @@ class PromptBuilder:
         if not inp.endswith("?"):
             inp += "?"
         return SHELL_PROMPT.format(shell=self.shell, os=self.os, inp=inp)
-    
+
     def code_prompt(self, inp: str) -> str:
         inp = inp.strip()
         if not inp.endswith("?"):
             inp += "?"
         return CODE_PROMPT.format(inp=inp)
-    
+
     def do_prompt(self, inp: str, actions=[]) -> str:
         inp = inp.strip()
         if not inp.endswith("?"):
             inp += "?"
         return DO_PROMPT.format(inp=inp, actions=actions)
-    
+
     def load_env_var_prompt(self, inp: str) -> str:
         inp = inp.strip()
         if not inp.endswith("?"):
             inp += "?"
         return LOAD_ENV_VAR_PROMPT.format(inp=inp)
-    
+
     def load_file_prompt(self, inp: str) -> str:
         inp = inp.strip()
-        if not inp.endswith("?"):
-            inp += "?"
         return LOAD_FILE_PROMPT.format(inp=inp)
+
+    def save_file_prompt(self, inp: str) -> str:
+        inp = inp.strip()
+        return SAVE_FILE_PROMPT.format(inp=inp)
 
     def __os_name(self) -> str:
         operation_system = {
@@ -48,4 +50,3 @@ class PromptBuilder:
             "Darwin": "MacOS " + platform.mac_ver()[0],
         }
         return operation_system.get(platform.system(), "Unknown")
-    
